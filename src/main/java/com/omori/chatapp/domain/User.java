@@ -1,10 +1,10 @@
 package com.omori.chatapp.domain;
 
+import com.omori.chatapp.domain.enums.UserStatus;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import jakarta.persistence.*;
 import java.util.Set;
-
 import lombok.Data;
 
 @Entity
@@ -36,12 +36,5 @@ public class User {
 
   private LocalDateTime createdAt = LocalDateTime.now();
   private LocalDateTime updateAt;
-
-  public enum UserStatus {
-    ONLINE,
-    OFFLINE,
-    AWAY,
-    BUSY
-  }
 
 }
