@@ -4,9 +4,17 @@ import com.omori.chatapp.domain.enums.UserEnum.*;
 import java.time.LocalDateTime;
 import jakarta.persistence.*;
 import jakarta.persistence.Table;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
 @Entity
 @Table(name = "users")
 public class User {
@@ -31,10 +39,10 @@ public class User {
   private String phoneNumber;
 
   @Column(name = "full_name", length = 250)
-  private String fullName;
+  private String fullName = "Anonymous";
 
   @Enumerated(EnumType.STRING)
-  @Column(nullable = false, columnDefinition = "ENUM('online','offline','busy','away')")
+  @Column(nullable = false, columnDefinition = "ENUM('ONLINE','OFFLINE','BUSY','AWAY')")
   private Status status = Status.OFFLINE;
 
   @Column(name = "created_at", updatable = false)
@@ -68,7 +76,7 @@ public class User {
   private boolean twoFaceEnabled = false;
 
   @Enumerated(EnumType.STRING)
-  @Column(nullable = false, columnDefinition = "ENUM('user','admin','moderator')")
+  @Column(nullable = false, columnDefinition = "ENUM('USER','ADMIN','MODERATOR')")
   private Role role = Role.USER;
 
   @Column(name = "timezone", length = 50)
@@ -81,7 +89,7 @@ public class User {
   private String sessionId;
 
   @Enumerated(EnumType.STRING)
-  @Column(name = "auth_provider", nullable = false, columnDefinition = "ENUM('google', 'facebook','github','local')")
+  @Column(nullable = false, columnDefinition = "ENUM('LOCAL','GOOGLE','FACEBOOK','GITHUB')")
   private AuthProvider authProvider = AuthProvider.LOCAL;
 
   @Column(name = "auth_provider_id", length = 255)

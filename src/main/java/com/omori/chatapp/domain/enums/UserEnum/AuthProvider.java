@@ -1,5 +1,13 @@
 package com.omori.chatapp.domain.enums.UserEnum;
 
 public enum AuthProvider {
-  GOOGLE, FACEBOOK, GITHUB, LOCAL
+  LOCAL, GOOGLE, FACEBOOK, GITHUB;
+  // public static AuthProvider froVProvidermString(String value) {
+  // for (AuthProvider authProvider : AuthProvider.values()) {
+  // if (authProvider.name().equalsIgnoreCase(value)) {
+  // return authProvider;
+  // }
+  // }
+  // throw new IllegalArgumentException("No enum constant for value: " + value);
+  // }
 }
