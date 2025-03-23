@@ -1,87 +1,111 @@
 package com.omori.chatapp.domain;
 
-import com.omori.chatapp.domain.enums.UserStatus;
+import com.omori.chatapp.domain.enums.UserEnum.*;
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import jakarta.persistence.*;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-import java.util.Set;
-
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
 @Entity
 @Table(name = "users")
 public class User {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  private long id;
 
-  @Column(unique = true, nullable = false)
-  private String userName;
-  @Column(nullable = false)
-  private String password;
-  @Column(unique = true, nullable = false)
+  @Column(nullable = false, unique = true, length = 50)
+  private String username;
+
+  @Column(name = "password_hash", nullable = false, length = 60)
+  private String passwordHash;
+
+  @Column(nullable = false, unique = true, length = 100)
   private String email;
 
-  private String fullName;
-  private String avatarUrl;
+  @Column(name = "avatar_path", length = 200)
+  private String avatarPath;
+
+  @Column(name = "phone_number", unique = true, length = 20)
+  private String phoneNumber;
+
+  @Column(name = "full_name", length = 250)
+  private String fullName = "Anonymous";
 
   @Enumerated(EnumType.STRING)
-  private UserStatus status;
+  @Column(nullable = false, columnDefinition = "ENUM('ONLINE','OFFLINE','BUSY','AWAY')")
+  private Status status = Status.OFFLINE;
 
-  private LocalDateTime lastSeen;
+  @Column(name = "created_at", updatable = false)
+  private LocalDateTime createdAt;
 
-  @ElementCollection
-  private Set<String> roomIds = new HashSet<>();
+  @Column(name = "updated_at")
+  private LocalDateTime updatedAt;
 
-  private LocalDateTime createdAt = LocalDateTime.now();
-  private LocalDateTime updateAt;
+  @Column(name = "last_login")
+  private LocalDateTime lastLogin;
 
-  public User(Long id, String userName, String password, String email, String fullName, String avatarUrl,
-      UserStatus status, LocalDateTime lastSeen, Set<String> roomIds, LocalDateTime createdAt, LocalDateTime updateAt) {
-    this.id = id;
-    this.userName = userName;
-    this.password = password;
-    this.email = email;
-    this.fullName = fullName;
-    this.avatarUrl = avatarUrl;
-    this.status = status;
-    this.lastSeen = lastSeen;
-    this.roomIds = roomIds != null ? roomIds : new HashSet<>();
-    this.createdAt = createdAt != null ? createdAt : LocalDateTime.now();
-    this.updateAt = updateAt;
+  @Column(name = "last_activitiy")
+  private LocalDateTime lastActivity;
+
+  @Column(name = "is_verified")
+  private boolean isVerified = false;
+
+  @Column(name = "email_verified_at")
+  private LocalDateTime emailVerifiedAt;
+
+  @Column(name = "login_attempts", nullable = false)
+  private int loginAttempt = 0;
+
+  @Column(name = "failed_login_at")
+  private LocalDateTime failedLoginAt;
+
+  @Column(name = "is_locked", nullable = false)
+  private boolean isLocked = false;
+
+  @Column(name = "two_face_enabled", nullable = false)
+  private boolean twoFaceEnabled = false;
+
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = false, columnDefinition = "ENUM('USER','ADMIN','MODERATOR')")
+  private Role role = Role.USER;
+
+  @Column(name = "timezone", length = 50)
+  private String timeZone = "UTC";
+
+  @Column(name = "deleted_at")
+  private LocalDateTime deletedAt;
+
+  @Column(name = "session_id", length = 255)
+  private String sessionId;
+
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = false, columnDefinition = "ENUM('LOCAL','GOOGLE','FACEBOOK','GITHUB')")
+  private AuthProvider authProvider = AuthProvider.LOCAL;
+
+  @Column(name = "auth_provider_id", length = 255)
+  private String authProviderId;
+
+  @Column(columnDefinition = "JSON")
+  private String settings;
+
+  @PrePersist
+  protected void onCreate() {
+    createdAt = LocalDateTime.now();
   }
 
-  // Getters & setters
-  public Long getId() {
-    return id;
-  }
-
-  public String getUsername() {
-    return userName;
-  }
-
-  public String getFullName() {
-    return fullName;
-  }
-
-  public String getAvatarUrl() {
-    return avatarUrl;
-  }
-
-  public UserStatus getStatus() {
-    return status;
-  }
-
-  public LocalDateTime getLastSeen() {
-    return lastSeen;
-  }
-
-  public LocalDateTime getCreatedAt() {
-    return createdAt;
-  }
-
-  public LocalDateTime getUpdateAt() {
-    return updateAt;
+  @PreUpdate
+  protected void onUpdate() {
+    updatedAt = LocalDateTime.now();
   }
 
 }

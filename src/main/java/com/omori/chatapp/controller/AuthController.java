@@ -1,29 +1,30 @@
 package com.omori.chatapp.controller;
 
-import com.omori.chatapp.service.JwtService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.omori.chatapp.dto.RegisterRequestDTO;
+import com.omori.chatapp.service.AuthService;
+
+import jakarta.validation.Valid;
+
+/**
+ * AuthController
+ */
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
 
-  @Autowired
-  private JwtService jwtService;
+  private final AuthService authService;
 
-  @PostMapping("/login")
-  public ResponseEntity<String> login(@RequestParam String username) {
-    String token = jwtService.generateToken(username);
-    return ResponseEntity.ok(token);
+  public AuthController(AuthService authService) {
+    this.authService = authService;
   }
 
-  @GetMapping("/validate")
-  public ResponseEntity<String> validateToken(@RequestParam String token) {
-    if (jwtService.isTokenValid(token, jwtService.extractUsername(token))) {
-      return ResponseEntity.ok("Token hợp lệ");
-    } else {
-      return ResponseEntity.status(401).body("Token không hợp lệ hoặc đã hết hạn");
-    }
+  @PostMapping("/register")
+  public ResponseEntity<String> register(@Valid @RequestBody RegisterRequestDTO request) {
+    String message = authService.registerUser(request);
+    return ResponseEntity.ok(message);
   }
+
 }
