@@ -108,4 +108,35 @@ public class User {
     updatedAt = LocalDateTime.now();
   }
 
+  /*
+   * Getter &Setter
+   */
+  public String getUsername() {
+    return this.username;
+  }
+
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
+  public String getPasswordHash() {
+    return this.passwordHash;
+  }
+
+  public void setPasswordHash(String passwordHash) {
+    this.passwordHash = passwordHash;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  public void setRole(Role role) {
+    this.role = role;
+  }
+
+  public void setAuthProvider(AuthProvider authProvider) {
+    this.authProvider = authProvider;
+  }
+
 }
