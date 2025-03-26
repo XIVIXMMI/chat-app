@@ -23,8 +23,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
   private final JwtUtils jwtUtils;
   private final UserDetailsSeviceImpl userDetailsSeviceImpl;
-  // private final Logger logger =
-  // LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
   @Autowired
   public JwtAuthenticationFilter(JwtUtils jwtUtils, UserDetailsSeviceImpl userDetailsSeviceImpl) {
@@ -38,7 +36,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     try {
       String token = extractToken(request);
       if (token != null) {
+        logger.info("Token received: " + token);
         String username = jwtUtils.extractUsername(token);
+        logger.info("Extracted username: " + username);
         UserDetails userDetails = userDetailsSeviceImpl.loadUserByUsername(username);
 
         if (jwtUtils.validateToken(token, userDetails)) {
@@ -56,8 +56,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       // log error , handle token validation exception
       logger.error("JWT Authentication Error: ", e);
       response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+      response.getWriter().write("Authentication failed: " + e.getMessage());
     }
-    chain.doFilter(request, response);
   }
 
   private String extractToken(HttpServletRequest request) {

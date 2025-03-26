@@ -14,7 +14,7 @@ public class PasswordEncoderConfig {
 
   @Bean
   public PasswordEncoder passwordEncoder() {
-    // return new BCryptPasswordEncoder();
-    return NoOpPasswordEncoder.getInstance(); // using in dev environment
+    return new BCryptPasswordEncoder();
+    // return NoOpPasswordEncoder.getInstance(); // using in dev environment
   }
 }

@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import com.omori.chatapp.dto.AuthResponseDTO;
 import com.omori.chatapp.dto.LoginRequestDTO;
 import com.omori.chatapp.dto.RegisterRequestDTO;
-import com.omori.chatapp.service.AuthService;
 import com.omori.chatapp.service.AuthServiceImpl;
 import com.omori.chatapp.service.UserDetailsSeviceImpl;
 import com.omori.chatapp.utils.JwtUtils;
@@ -22,8 +21,8 @@ import lombok.RequiredArgsConstructor;
  * AuthController
  */
 @RestController
-@RequestMapping("/auth")
-@RequiredArgsConstructor
+@RequestMapping("/api/auth")
+// @RequiredArgsConstructor
 public class AuthController {
 
   private final AuthServiceImpl authServiceImpl;
@@ -31,15 +30,15 @@ public class AuthController {
   private final AuthenticationManager authenticationManager;
   private final JwtUtils jwtUtils;
 
-  // @Autowired
-  // public AuthController(UserDetailsSeviceImpl userDetailsSeviceImpl,
-  // AuthServiceImpl authServiceImpl,
-  // AuthenticationManager authenticationManager, JwtUtils jwtUtils) {
-  // this.userDetailsSeviceImpl = userDetailsSeviceImpl;
-  // this.authServiceImpl = authServiceImpl;
-  // this.authenticationManager = authenticationManager;
-  // this.jwtUtils = jwtUtils;
-  // }
+  @Autowired
+  public AuthController(UserDetailsSeviceImpl userDetailsSeviceImpl,
+      AuthServiceImpl authServiceImpl,
+      AuthenticationManager authenticationManager, JwtUtils jwtUtils) {
+    this.userDetailsSeviceImpl = userDetailsSeviceImpl;
+    this.authServiceImpl = authServiceImpl;
+    this.authenticationManager = authenticationManager;
+    this.jwtUtils = jwtUtils;
+  }
 
   @PostMapping("/register")
   public ResponseEntity<?> register(@Valid @RequestBody RegisterRequestDTO request) {
