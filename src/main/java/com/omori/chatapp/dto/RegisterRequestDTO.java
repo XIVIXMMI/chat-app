@@ -11,16 +11,16 @@ import lombok.Data;
 @Data
 public class RegisterRequestDTO {
 
-  @NotBlank
-  @Size(min = 3, max = 50)
+  @NotBlank(message = "username is not blank")
+  @Size(min = 3, max = 50, message = "username must atleast 3 character")
   private String username;
 
-  @NotBlank
-  @Email
+  @NotBlank(message = "email is not blank")
+  @Email(message = "Email is not valid")
   private String email;
 
-  @NotBlank
-  @Size(min = 6, max = 100)
+  @NotBlank(message = "password is not blank")
+  @Size(min = 6, max = 100, message = "password is atleast 6 character")
   private String password;
 
   private String fullName = "Anonymous"; // default value
