@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import com.omori.chatapp.dto.AuthResponseDTO;
 import com.omori.chatapp.dto.LoginRequestDTO;
 import com.omori.chatapp.dto.RegisterRequestDTO;
-import com.omori.chatapp.service.AuthServiceImpl;
+import com.omori.chatapp.service.impl.AuthServiceImpl;
 import com.omori.chatapp.service.UserDetailsSeviceImpl;
 import com.omori.chatapp.utils.JwtUtils;
 

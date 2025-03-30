@@ -27,13 +27,6 @@ public class JwtUtils {
 
   private SecretKey secretKey;
 
-  // public JwtUtils(
-  // @Value("${jwt.secret}") String secretKeyString,
-  // @Value("${jwt.expiration-time}") long expirationTime) {
-  // this.secretKeyString = secretKeyString;
-  // this.expirationTime = expirationTime;
-  // }
-
   @PostConstruct
   public void init() {
     this.secretKey = Keys.hmacShaKeyFor(
