@@ -1,4 +1,4 @@
-package com.omori.chatapp.service;
+package com.omori.chatapp.service.impl;
 
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +10,7 @@ import com.omori.chatapp.domain.enums.UserEnum.AuthProvider;
 import com.omori.chatapp.domain.enums.UserEnum.Role;
 import com.omori.chatapp.dto.RegisterRequestDTO;
 import com.omori.chatapp.repository.UserRepository;
+import com.omori.chatapp.service.AuthService;
 
 import lombok.RequiredArgsConstructor;
 

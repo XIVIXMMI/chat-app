@@ -21,7 +21,7 @@ public class User {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private long id;
+  private Long id;
 
   @Column(nullable = false, unique = true, length = 50)
   private String username;
@@ -111,6 +111,11 @@ public class User {
   /*
    * Getter &Setter
    */
+
+  public Long getId() {
+    return this.id;
+  }
+
   public String getUsername() {
     return this.username;
   }
@@ -125,6 +130,10 @@ public class User {
 
   public void setPasswordHash(String passwordHash) {
     this.passwordHash = passwordHash;
+  }
+
+  public String getEmail() {
+    return this.email;
   }
 
   public void setEmail(String email) {
