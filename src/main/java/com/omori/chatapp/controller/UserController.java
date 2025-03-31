@@ -32,9 +32,14 @@ public class UserController {
     return ResponseEntity.ok(userService.findUserById(id));
   }
 
+  @GetMapping("/deleted")
+  public ResponseEntity<List<User>> getDeletedUser() {
+    return ResponseEntity.ok(userService.findDeletedUsers());
+  }
+
   @DeleteMapping("/{id}")
   public ResponseEntity<String> deleteUser(@PathVariable Long id) {
-    userService.deleteUserById(id);
+    userService.softDeleteUserById(id);
     return ResponseEntity.ok("User deleted successfully!");
   }
 
