@@ -1,5 +1,6 @@
 package com.omori.chatapp.service.impl;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -19,7 +20,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public List<User> findAllUsers() {
-    return userRepository.findAll();
+    return userRepository.findAllActiveUsers();
   }
 
   @Override
@@ -29,10 +30,15 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public void deleteUserById(Long id) {
-    if (!userRepository.existsById(id)) {
-      throw new UserNotFoundException("User not found with id: " + id);
-    }
-    userRepository.deleteById(id);
+  public List<User> findDeletedUsers() {
+    return userRepository.findAllDeletedUsers(); // Get list of deleted users
+  }
+
+  @Override
+  public void softDeleteUserById(Long id) {
+    User user = userRepository.findByIdAndDeletedAtIsNull(id)
+        .orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
+    user.setDeletedAt(LocalDateTime.now()); // Mark as deleted
+    userRepository.save(user); // update Database
   }
 }

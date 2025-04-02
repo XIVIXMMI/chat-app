@@ -148,4 +148,8 @@ public class User {
     this.authProvider = authProvider;
   }
 
+  public void setDeletedAt(LocalDateTime deletedAt) {
+    this.deletedAt = deletedAt;
+  }
+
 }

@@ -10,6 +10,8 @@ public interface UserService {
 
   User findUserById(Long id);
 
-  void deleteUserById(Long id);
+  void softDeleteUserById(Long id);
+
+  List<User> findDeletedUsers();
 
 }
