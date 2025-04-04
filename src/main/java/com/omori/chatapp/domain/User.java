@@ -148,6 +148,30 @@ public class User {
     this.email = email;
   }
 
+  public String getFullName() {
+    return this.fullName;
+  }
+
+  public void setFullName(String fullName) {
+    this.fullName = fullName;
+  }
+
+  public String getPhoneNumber() {
+    return this.phoneNumber;
+  }
+
+  public void setPhoneNumber(String phoneNumber) {
+    this.phoneNumber = phoneNumber;
+  }
+
+  public String getAvatarPath() {
+    return this.avatarPath;
+  }
+
+  public void setAvatarPath(String avatarPath) {
+    this.avatarPath = avatarPath;
+  }
+
   public Role getRole() {
     return this.role;
   }
@@ -164,4 +188,11 @@ public class User {
     this.deletedAt = deletedAt;
   }
 
+  public String getTimeZone() {
+    return this.timeZone;
+  }
+
+  public void setTimeZone(String timeZone) {
+    this.timeZone = timeZone;
+  }
 }
