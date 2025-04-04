@@ -3,7 +3,6 @@ package com.omori.chatapp.domain;
 import com.omori.chatapp.domain.enums.UserEnum.*;
 import java.time.LocalDateTime;
 import jakarta.persistence.*;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -72,8 +71,8 @@ public class User {
   @Column(name = "is_locked", nullable = false)
   private boolean isLocked = false;
 
-  @Column(name = "two_face_enabled", nullable = false)
-  private boolean twoFaceEnabled = false;
+  @Column(name = "two_factor_enabled", nullable = false)
+  private boolean twoFactorEnabled = false;
 
   @Enumerated(EnumType.STRING)
   @Column(nullable = false, columnDefinition = "ENUM('USER','ADMIN','MODERATOR')")
@@ -100,12 +99,21 @@ public class User {
 
   @PrePersist
   protected void onCreate() {
-    createdAt = LocalDateTime.now();
+    this.createdAt = LocalDateTime.now();
+    this.updatedAt = LocalDateTime.now();
   }
 
   @PreUpdate
   protected void onUpdate() {
-    updatedAt = LocalDateTime.now();
+    this.updatedAt = LocalDateTime.now();
+  }
+
+  public boolean isDeleted() {
+    return deletedAt != null;
+  }
+
+  public void restore() {
+    this.deletedAt = null;
   }
 
   /*
@@ -138,6 +146,10 @@ public class User {
 
   public void setEmail(String email) {
     this.email = email;
+  }
+
+  public Role getRole() {
+    return this.role;
   }
 
   public void setRole(Role role) {

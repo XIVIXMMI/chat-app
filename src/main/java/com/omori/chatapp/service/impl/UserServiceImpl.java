@@ -1,10 +1,10 @@
 package com.omori.chatapp.service.impl;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import org.springframework.stereotype.Service;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import com.omori.chatapp.exception.UserNotFoundException;
 import com.omori.chatapp.repository.UserRepository;
 import com.omori.chatapp.domain.User;
@@ -19,8 +19,8 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public List<User> findAllUsers() {
-    return userRepository.findAllActiveUsers();
+  public Page<User> findAllUsers(Pageable pageable) {
+    return userRepository.findAllActiveUsers(pageable);
   }
 
   @Override
@@ -30,8 +30,8 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public List<User> findDeletedUsers() {
-    return userRepository.findAllDeletedUsers(); // Get list of deleted users
+  public Page<User> findDeletedUsers(Pageable pageable) {
+    return userRepository.findAllDeletedUsers(pageable); // Get list of deleted users
   }
 
   @Override
