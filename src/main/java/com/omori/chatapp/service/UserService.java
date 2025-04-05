@@ -4,6 +4,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Page;
 
 import com.omori.chatapp.domain.User;
+import com.omori.chatapp.dto.UserUpdateDTO;
 
 public interface UserService {
 
@@ -14,5 +15,7 @@ public interface UserService {
   void softDeleteUserById(Long id);
 
   Page<User> findDeletedUsers(Pageable pageable);
+
+  User updateUserProfile(Long id, UserUpdateDTO userUpdateDTO);
 
 }

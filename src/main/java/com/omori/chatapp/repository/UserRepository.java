@@ -43,4 +43,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
   @Query("SELECT u FROM User u WHERE u.deletedAt IS NOT NULL")
   Page<User> findAllDeletedUsers(Pageable pageable);
+
+  boolean existsByEmailAndIdNot(String email, Long id);
+
+  boolean existsByPhoneNumberAndIdNot(String phoneNumber, Long id);
+
 }

@@ -91,6 +91,18 @@
         <artifactId>slf4j-api</artifactId>
     </dependency>
 
+<!-- Spring AOP -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-aop</artifactId>
+</dependency>
+
+<!-- AspectJ -->
+<dependency>
+    <groupId>org.aspectj</groupId>
+    <artifactId>aspectjweaver</artifactId>
+</dependency>
+
 	</dependencies>
 	<build>
 		<plugins>

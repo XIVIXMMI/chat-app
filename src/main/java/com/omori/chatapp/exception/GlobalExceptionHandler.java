@@ -5,14 +5,15 @@ import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.support.MethodArgumentNotValidException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-/**
- * GlobalExceptionHandler
- */
-@RestControllerAdvice
+import com.omori.chatapp.dto.ErrorResponseDTO;
+import com.omori.chatapp.exception.ConflictException;
+
+@ControllerAdvice
 public class GlobalExceptionHandler {
 
   @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -24,4 +25,20 @@ public class GlobalExceptionHandler {
     return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
   }
 
+  @ExceptionHandler(ConflictException.class)
+  public ResponseEntity<String> handleConflictException(ConflictException ex) {
+    return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+  }
+
+  @ExceptionHandler(AccessDeniedException.class)
+  public ResponseEntity<ErrorResponseDTO> handleAccessDenied(AccessDeniedException ex) {
+    return ResponseEntity.status(HttpStatus.FORBIDDEN)
+        .body(new ErrorResponseDTO("ACCESS_DENIED", "You don't have permission to perform this action."));
+  }
+
+  @ExceptionHandler(IllegalArgumentException.class)
+  public ResponseEntity<ErrorResponseDTO> handleIllegalArgument(IllegalArgumentException ex) {
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+        .body(new ErrorResponseDTO("INVALID_REQUEST", "invalid parameters provided."));
+  }
 }

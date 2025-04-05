@@ -1,6 +1,7 @@
 package com.omori.chatapp.controller;
 
 import com.omori.chatapp.domain.User;
+import com.omori.chatapp.dto.UserUpdateDTO;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,11 +12,15 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.omori.chatapp.service.UserService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/users")
@@ -49,6 +54,15 @@ public class UserController {
       @RequestParam(defaultValue = "10") int size) {
     Pageable pageable = PageRequest.of(page, size, Sort.by("id").ascending());
     return ResponseEntity.ok(userService.findDeletedUsers(pageable));
+  }
+
+  @PutMapping("/{id}/profile")
+  @PreAuthorize("hasAuthority('ROLE_ADMIN') or (authentication.principal.id == #id)")
+  public ResponseEntity<User> updateUserProfile(
+      @PathVariable Long id,
+      @Valid @RequestBody UserUpdateDTO updateDTO) {
+    User updateUser = userService.updateUserProfile(id, updateDTO);
+    return ResponseEntity.ok(updateUser);
   }
 
   @DeleteMapping("/{id}")

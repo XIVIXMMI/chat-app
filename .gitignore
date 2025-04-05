@@ -35,3 +35,4 @@ build/
 
 # Ignore application.properties ở đúng vị trí
 **/application.properties
+**/ValidationMessages.properties
