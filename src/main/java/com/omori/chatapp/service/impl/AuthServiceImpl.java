@@ -12,8 +12,6 @@ import com.omori.chatapp.dto.RegisterRequestDTO;
 import com.omori.chatapp.repository.UserRepository;
 import com.omori.chatapp.service.AuthService;
 
-import lombok.RequiredArgsConstructor;
-
 @Service
 // @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {

@@ -1,6 +1,5 @@
 package com.omori.chatapp.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data

@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.omori.chatapp.dto.ErrorResponseDTO;
-import com.omori.chatapp.exception.ConflictException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {

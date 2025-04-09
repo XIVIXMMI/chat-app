@@ -1,6 +1,7 @@
 package com.omori.chatapp.controller;
 
 import com.omori.chatapp.domain.User;
+import com.omori.chatapp.dto.PasswordChangeRequestDTO;
 import com.omori.chatapp.dto.UserUpdateDTO;
 
 import org.springframework.data.domain.Page;
@@ -12,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -72,4 +74,12 @@ public class UserController {
     return ResponseEntity.ok("User deleted successfully!");
   }
 
+  @PostMapping("/{userId}/password")
+  @PreAuthorize("hasAuthority('ROLE_ADMIN') or (authentication.principal.id == #userId)")
+  public ResponseEntity<String> changePassword(
+      @PathVariable Long userId,
+      @Valid @RequestBody PasswordChangeRequestDTO request) {
+    userService.changePassword(userId, request);
+    return ResponseEntity.ok("Password updated successfully");
+  }
 }
