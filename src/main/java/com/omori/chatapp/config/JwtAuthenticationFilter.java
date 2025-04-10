@@ -10,7 +10,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.omori.chatapp.service.UserDetailsSeviceImpl;
+import com.omori.chatapp.service.impl.UserDetailsServiceImpl;
 import com.omori.chatapp.utils.JwtUtils;
 
 import jakarta.servlet.FilterChain;
@@ -22,10 +22,10 @@ import jakarta.servlet.ServletException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
   private final JwtUtils jwtUtils;
-  private final UserDetailsSeviceImpl userDetailsSeviceImpl;
+  private final UserDetailsServiceImpl userDetailsSeviceImpl;
 
   @Autowired
-  public JwtAuthenticationFilter(JwtUtils jwtUtils, UserDetailsSeviceImpl userDetailsSeviceImpl) {
+  public JwtAuthenticationFilter(JwtUtils jwtUtils, UserDetailsServiceImpl userDetailsSeviceImpl) {
     this.jwtUtils = jwtUtils;
     this.userDetailsSeviceImpl = userDetailsSeviceImpl;
   }

@@ -11,27 +11,25 @@ import com.omori.chatapp.dto.AuthResponseDTO;
 import com.omori.chatapp.dto.LoginRequestDTO;
 import com.omori.chatapp.dto.RegisterRequestDTO;
 import com.omori.chatapp.service.impl.AuthServiceImpl;
-import com.omori.chatapp.service.UserDetailsSeviceImpl;
+import com.omori.chatapp.service.impl.UserDetailsServiceImpl;
 import com.omori.chatapp.utils.JwtUtils;
 
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 
 /**
  * AuthController
  */
 @RestController
 @RequestMapping("/api/auth")
-// @RequiredArgsConstructor
 public class AuthController {
 
   private final AuthServiceImpl authServiceImpl;
-  private final UserDetailsSeviceImpl userDetailsSeviceImpl;
+  private final UserDetailsServiceImpl userDetailsSeviceImpl;
   private final AuthenticationManager authenticationManager;
   private final JwtUtils jwtUtils;
 
   @Autowired
-  public AuthController(UserDetailsSeviceImpl userDetailsSeviceImpl,
+  public AuthController(UserDetailsServiceImpl userDetailsSeviceImpl,
       AuthServiceImpl authServiceImpl,
       AuthenticationManager authenticationManager, JwtUtils jwtUtils) {
     this.userDetailsSeviceImpl = userDetailsSeviceImpl;

@@ -10,17 +10,17 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import com.omori.chatapp.service.UserDetailsSeviceImpl;
+import com.omori.chatapp.service.impl.UserDetailsServiceImpl;
 
 @Component
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
-  private final UserDetailsSeviceImpl userDetailsSeviceImpl;
+  private final UserDetailsServiceImpl userDetailsServiceImpl;
   private final PasswordEncoder passwordEncoder;
 
   @Autowired
-  public CustomAuthenticationProvider(UserDetailsSeviceImpl userDetailsSeviceImpl, PasswordEncoder passwordEncoder) {
-    this.userDetailsSeviceImpl = userDetailsSeviceImpl;
+  public CustomAuthenticationProvider(UserDetailsServiceImpl userDetailsServiceImpl, PasswordEncoder passwordEncoder) {
+    this.userDetailsServiceImpl = userDetailsServiceImpl;
     this.passwordEncoder = passwordEncoder;
   }
 
@@ -29,7 +29,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     String username = authentication.getName();
     String password = authentication.getCredentials().toString();
 
-    UserDetails user = userDetailsSeviceImpl.loadUserByUsername(username);
+    UserDetails user = userDetailsServiceImpl.loadUserByUsername(username);
     if (!passwordEncoder.matches(password, user.getPassword())) {
       throw new BadCredentialsException("Invalid credenitals");
     }

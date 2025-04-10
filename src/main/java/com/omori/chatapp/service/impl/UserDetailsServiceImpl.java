@@ -1,4 +1,4 @@
-package com.omori.chatapp.service;
+package com.omori.chatapp.service.impl;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -10,11 +10,11 @@ import com.omori.chatapp.repository.UserRepository;
 import com.omori.chatapp.security.CustomUserDetails;
 
 @Service
-public class UserDetailsSeviceImpl implements UserDetailsService {
+public class UserDetailsServiceImpl implements UserDetailsService {
 
   private final UserRepository userRepository;
 
-  public UserDetailsSeviceImpl(UserRepository userRepository) {
+  public UserDetailsServiceImpl(UserRepository userRepository) {
     this.userRepository = userRepository;
   }
 

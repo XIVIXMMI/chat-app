@@ -23,7 +23,7 @@ public class RegisterRequestDTO {
   @Size(min = 6, max = 100, message = "password is atleast 6 character")
   private String password;
 
-  private String fullName = "Anonymous"; // default value
+  private String fullName = "Guest"; // default value
 
   public RegisterRequestDTO() {
   }
