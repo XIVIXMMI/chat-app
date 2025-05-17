@@ -1,5 +1,9 @@
 package com.omori.chatapp.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,6 +25,8 @@ import jakarta.validation.Valid;
  */
 @RestController
 @RequestMapping("/api/auth")
+@SecurityRequirement(name = "bearer-jwt")
+@Tag(name = "Authentication Manegement", description = "APIs for authenticate user in chat application")
 public class AuthController {
 
   private final AuthServiceImpl authServiceImpl;
@@ -39,12 +45,14 @@ public class AuthController {
   }
 
   @PostMapping("/register")
+  @Operation(summary = "register new user", description = "the default role will be 'user' ")
   public ResponseEntity<?> register(@Valid @RequestBody RegisterRequestDTO request) {
     authServiceImpl.registerUser(request);
     return ResponseEntity.ok("User registered successfully!!");
   }
 
   @PostMapping("/login")
+  @Operation(summary = "login user", description = "use to login and create authenticate token")
   public ResponseEntity<?> loginUser(@RequestBody LoginRequestDTO request) {
     authenticationManager.authenticate(
         new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));

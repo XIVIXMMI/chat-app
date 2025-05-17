@@ -36,7 +36,11 @@ public class SecurityConfig {
     http
         .csrf(csrf -> csrf.disable()) // turn off the CSRF to test API easy (just in dev environment)
         .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/api/auth/**").permitAll() // allow API signup and login
+            .requestMatchers(
+                "/api/auth/**",
+                "/swagger-ui/**",
+                "/v3/api-docs/**")
+            .permitAll()
             .requestMatchers("/api/users/{userId}/profile").authenticated()
             .requestMatchers(HttpMethod.POST, "/api/users/**/password").authenticated()
             .requestMatchers("/api/users/**").hasAuthority("ROLE_ADMIN")
