@@ -1,5 +1,9 @@
 package com.omori.chatapp.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.*;
+
 import com.omori.chatapp.domain.User;
 import com.omori.chatapp.dto.PasswordChangeRequestDTO;
 import com.omori.chatapp.dto.UserUpdateDTO;
@@ -26,6 +30,8 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/users")
+@SecurityRequirement(name = "bearer-jwt")
+@Tag(name = "Users Manegement", description = "APIs for manegement users in chat application")
 public class UserController {
 
   private final UserService userService;
@@ -36,6 +42,7 @@ public class UserController {
 
   @GetMapping
   @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+  @Operation(summary = "Get All Users", description = "get list of all user")
   public ResponseEntity<Page<User>> getAllUsers(
       @RequestParam(defaultValue = "0") int page,
       @RequestParam(defaultValue = "10") int size) {
@@ -45,12 +52,14 @@ public class UserController {
 
   @GetMapping("/{id}")
   @PreAuthorize("hasAuthority('ROLE_ADMIN', 'ROLE_USER')")
+  @Operation(summary = "Get User By Id", description = "get single user by id of that user")
   public ResponseEntity<User> getUserById(@PathVariable Long id) {
     return ResponseEntity.ok(userService.findUserById(id));
   }
 
   @GetMapping("/deleted")
   @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+  @Operation(summary = "Get All Deleted Users", description = "get list of all deleted user")
   public ResponseEntity<Page<User>> getDeletedUser(
       @RequestParam(defaultValue = "0") int page,
       @RequestParam(defaultValue = "10") int size) {
@@ -60,6 +69,7 @@ public class UserController {
 
   @PutMapping("/{id}/profile")
   @PreAuthorize("hasAuthority('ROLE_ADMIN') or (authentication.principal.id == #id)")
+  @Operation(summary = "Update User Profile", description = "Adjust infomation for user")
   public ResponseEntity<User> updateUserProfile(
       @PathVariable Long id,
       @Valid @RequestBody UserUpdateDTO updateDTO) {
@@ -69,6 +79,7 @@ public class UserController {
 
   @DeleteMapping("/{id}")
   @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+  @Operation(summary = "Delete Users", description = "disable user account")
   public ResponseEntity<String> deleteUser(@PathVariable Long id) {
     userService.softDeleteUserById(id);
     return ResponseEntity.ok("User deleted successfully!");
@@ -76,6 +87,7 @@ public class UserController {
 
   @PostMapping("/{userId}/password")
   @PreAuthorize("hasAuthority('ROLE_ADMIN') or (authentication.principal.id == #userId)")
+  @Operation(summary = "Change Password User", description = "change password for own user and admin role could do it too")
   public ResponseEntity<String> changePassword(
       @PathVariable Long userId,
       @Valid @RequestBody PasswordChangeRequestDTO request) {
