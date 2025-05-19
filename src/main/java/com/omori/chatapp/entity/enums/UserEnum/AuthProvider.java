@@ -1,4 +1,4 @@
-package com.omori.chatapp.domain.enums.UserEnum;
+package com.omori.chatapp.entity.enums.UserEnum;
 
 public enum AuthProvider {
   LOCAL, GOOGLE, FACEBOOK, GITHUB;

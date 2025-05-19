@@ -1,7 +1,9 @@
-package com.omori.chatapp.domain;
+package com.omori.chatapp.entity;
 
-import com.omori.chatapp.domain.enums.UserEnum.*;
+import com.omori.chatapp.entity.enums.UserEnum.*;
 import java.time.LocalDateTime;
+import java.util.Date;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -36,6 +38,9 @@ public class User {
 
   @Column(name = "phone_number", unique = true, length = 20)
   private String phoneNumber;
+
+  @Column(name = "date_of_birth")
+  private LocalDateTime dateOfBirth;
 
   @Column(name = "full_name", length = 250)
   private String fullName = "Anonymous";

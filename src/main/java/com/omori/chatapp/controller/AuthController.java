@@ -11,9 +11,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import com.omori.chatapp.dto.AuthResponseDTO;
-import com.omori.chatapp.dto.LoginRequestDTO;
-import com.omori.chatapp.dto.RegisterRequestDTO;
+import com.omori.chatapp.dto.auth.AuthResponseDTO;
+import com.omori.chatapp.dto.auth.LoginRequestDTO;
+import com.omori.chatapp.dto.auth.RegisterRequestDTO;
 import com.omori.chatapp.service.impl.AuthServiceImpl;
 import com.omori.chatapp.service.impl.UserDetailsServiceImpl;
 import com.omori.chatapp.utils.JwtUtils;
@@ -26,19 +26,19 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/api/auth")
 @SecurityRequirement(name = "bearer-jwt")
-@Tag(name = "Authentication Manegement", description = "APIs for authenticate user in chat application")
+@Tag(name = "Authentication Management", description = "APIs for authenticate user in chat application")
 public class AuthController {
 
   private final AuthServiceImpl authServiceImpl;
-  private final UserDetailsServiceImpl userDetailsSeviceImpl;
+  private final UserDetailsServiceImpl userDetailsServiceImpl;
   private final AuthenticationManager authenticationManager;
   private final JwtUtils jwtUtils;
 
   @Autowired
-  public AuthController(UserDetailsServiceImpl userDetailsSeviceImpl,
+  public AuthController(UserDetailsServiceImpl userDetailsServiceImpl,
       AuthServiceImpl authServiceImpl,
       AuthenticationManager authenticationManager, JwtUtils jwtUtils) {
-    this.userDetailsSeviceImpl = userDetailsSeviceImpl;
+    this.userDetailsServiceImpl = userDetailsServiceImpl;
     this.authServiceImpl = authServiceImpl;
     this.authenticationManager = authenticationManager;
     this.jwtUtils = jwtUtils;
@@ -56,7 +56,7 @@ public class AuthController {
   public ResponseEntity<?> loginUser(@RequestBody LoginRequestDTO request) {
     authenticationManager.authenticate(
         new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
-    UserDetails userDetails = userDetailsSeviceImpl.loadUserByUsername(request.getUsername());
+    UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(request.getUsername());
     String token = jwtUtils.generateToken(userDetails.getUsername());
 
     return ResponseEntity.ok(new AuthResponseDTO(token));

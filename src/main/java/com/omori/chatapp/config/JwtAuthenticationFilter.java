@@ -22,12 +22,12 @@ import jakarta.servlet.ServletException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
   private final JwtUtils jwtUtils;
-  private final UserDetailsServiceImpl userDetailsSeviceImpl;
+  private final UserDetailsServiceImpl userDetailsServiceImpl;
 
   @Autowired
-  public JwtAuthenticationFilter(JwtUtils jwtUtils, UserDetailsServiceImpl userDetailsSeviceImpl) {
+  public JwtAuthenticationFilter(JwtUtils jwtUtils, UserDetailsServiceImpl userDetailsServiceImpl) {
     this.jwtUtils = jwtUtils;
-    this.userDetailsSeviceImpl = userDetailsSeviceImpl;
+    this.userDetailsServiceImpl = userDetailsServiceImpl;
   }
 
   @Override
@@ -39,7 +39,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         logger.info("Token received: " + token);
         String username = jwtUtils.extractUsername(token);
         logger.info("Extracted username: " + username);
-        UserDetails userDetails = userDetailsSeviceImpl.loadUserByUsername(username);
+        UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(username);
 
         if (jwtUtils.validateToken(token, userDetails)) {
 

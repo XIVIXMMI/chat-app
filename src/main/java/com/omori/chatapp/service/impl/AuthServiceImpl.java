@@ -5,10 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.omori.chatapp.domain.User;
-import com.omori.chatapp.domain.enums.UserEnum.AuthProvider;
-import com.omori.chatapp.domain.enums.UserEnum.Role;
-import com.omori.chatapp.dto.RegisterRequestDTO;
+import com.omori.chatapp.entity.User;
+import com.omori.chatapp.entity.enums.UserEnum.AuthProvider;
+import com.omori.chatapp.entity.enums.UserEnum.Role;
+import com.omori.chatapp.dto.auth.RegisterRequestDTO;
 import com.omori.chatapp.repository.UserRepository;
 import com.omori.chatapp.service.AuthService;
 
