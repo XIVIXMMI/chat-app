@@ -1,11 +1,12 @@
 package com.omori.chatapp.service;
 
+import com.omori.chatapp.dto.user.UserProfileResponseDTO;
+import com.omori.chatapp.dto.user.UserProfileUpdateDTO;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Page;
 
-import com.omori.chatapp.domain.User;
-import com.omori.chatapp.dto.PasswordChangeRequestDTO;
-import com.omori.chatapp.dto.UserUpdateDTO;
+import com.omori.chatapp.entity.User;
+import com.omori.chatapp.dto.user.PasswordChangeRequestDTO;
 
 public interface UserService {
 
@@ -17,7 +18,7 @@ public interface UserService {
 
   Page<User> findDeletedUsers(Pageable pageable);
 
-  User updateUserProfile(Long id, UserUpdateDTO userUpdateDTO);
+  User updateUserProfile(Long id, UserProfileUpdateDTO userProfileUpdateDTO);
 
   void changePassword(Long id, PasswordChangeRequestDTO request);
 

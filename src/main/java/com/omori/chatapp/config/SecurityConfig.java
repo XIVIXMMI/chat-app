@@ -38,8 +38,8 @@ public class SecurityConfig {
         .authorizeHttpRequests(auth -> auth
             .requestMatchers(
                 "/api/auth/**",
-                "/swagger-ui/**",
-                "/v3/api-docs/**")
+                "/swagger-ui/**", // pretty UI
+                "/v3/api-docs/**") // Raw JSON
             .permitAll()
             .requestMatchers("/api/users/{userId}/profile").authenticated()
             .requestMatchers(HttpMethod.POST, "/api/users/**/password").authenticated()

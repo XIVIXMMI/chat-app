@@ -23,7 +23,7 @@ public class SwaggerConfig {
             .contact(new Contact()
                 .name("Khoi Nguyen")
                 .email("nguyen.le.programmer@gmail.com")
-                .url("https://github.com/XIVIMMI")))
+                .url("https://github.com/XIVIXMMI")))
         .servers(List.of(
             new Server().url("http://localhost:8080").description("Local Dev Server")))
         .components(new Components()

@@ -1,12 +1,14 @@
 package com.omori.chatapp.controller;
 
+import com.omori.chatapp.dto.user.UserProfileResponseDTO;
+import com.omori.chatapp.dto.user.UserProfileUpdateDTO;
+import com.omori.chatapp.mapper.UserMapper;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.*;
 
-import com.omori.chatapp.domain.User;
-import com.omori.chatapp.dto.PasswordChangeRequestDTO;
-import com.omori.chatapp.dto.UserUpdateDTO;
+import com.omori.chatapp.entity.User;
+import com.omori.chatapp.dto.user.PasswordChangeRequestDTO;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,7 +33,7 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/api/users")
 @SecurityRequirement(name = "bearer-jwt")
-@Tag(name = "Users Manegement", description = "APIs for manegement users in chat application")
+@Tag(name = "Users Management", description = "APIs for management users in chat application")
 public class UserController {
 
   private final UserService userService;
@@ -51,10 +53,12 @@ public class UserController {
   }
 
   @GetMapping("/{id}")
-  @PreAuthorize("hasAuthority('ROLE_ADMIN', 'ROLE_USER')")
+  @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")
   @Operation(summary = "Get User By Id", description = "get single user by id of that user")
-  public ResponseEntity<User> getUserById(@PathVariable Long id) {
-    return ResponseEntity.ok(userService.findUserById(id));
+  public ResponseEntity<UserProfileResponseDTO> getUserById(@PathVariable Long id) {
+    User user = userService.findUserById(id);
+    UserProfileResponseDTO dto = UserMapper.toUserProfileResponse(user);
+    return ResponseEntity.ok(dto);
   }
 
   @GetMapping("/deleted")
@@ -69,10 +73,10 @@ public class UserController {
 
   @PutMapping("/{id}/profile")
   @PreAuthorize("hasAuthority('ROLE_ADMIN') or (authentication.principal.id == #id)")
-  @Operation(summary = "Update User Profile", description = "Adjust infomation for user")
+  @Operation(summary = "Update User Profile", description = "Adjust information for user")
   public ResponseEntity<User> updateUserProfile(
       @PathVariable Long id,
-      @Valid @RequestBody UserUpdateDTO updateDTO) {
+      @Valid @RequestBody UserProfileUpdateDTO updateDTO) {
     User updateUser = userService.updateUserProfile(id, updateDTO);
     return ResponseEntity.ok(updateUser);
   }

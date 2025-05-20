@@ -1,6 +1,6 @@
-package com.omori.chatapp.dto;
+package com.omori.chatapp.dto.user;
 
-import com.omori.chatapp.domain.User;
+import com.omori.chatapp.entity.User;
 
 import lombok.Getter;
 import lombok.Setter;

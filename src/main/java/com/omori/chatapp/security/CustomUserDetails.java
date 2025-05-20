@@ -1,7 +1,7 @@
 // CustomUserDetails.java
 package com.omori.chatapp.security;
 
-import com.omori.chatapp.domain.User;
+import com.omori.chatapp.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;

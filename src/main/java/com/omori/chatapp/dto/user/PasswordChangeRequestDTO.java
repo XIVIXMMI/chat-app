@@ -1,4 +1,4 @@
-package com.omori.chatapp.dto;
+package com.omori.chatapp.dto.user;
 
 import org.springframework.lang.Nullable;
 

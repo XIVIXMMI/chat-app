@@ -1,8 +1,8 @@
 package com.omori.chatapp.service.impl;
 
-import java.net.Authenticator;
 import java.time.LocalDateTime;
 
+import com.omori.chatapp.dto.user.UserProfileResponseDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.domain.Page;
@@ -10,18 +10,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.omori.chatapp.exception.ConflictException;
 import com.omori.chatapp.exception.UserNotFoundException;
 import com.omori.chatapp.repository.UserRepository;
-import com.omori.chatapp.config.SecurityConfig;
-import com.omori.chatapp.domain.User;
-import com.omori.chatapp.dto.PasswordChangeRequestDTO;
-import com.omori.chatapp.dto.UserUpdateDTO;
+import com.omori.chatapp.entity.User;
+import com.omori.chatapp.dto.user.PasswordChangeRequestDTO;
+import com.omori.chatapp.dto.user.UserProfileUpdateDTO;
 import com.omori.chatapp.service.UserService;
-//import com.omori.chatapp.service.impl.UserDetailsServiceImpl;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -40,8 +37,8 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public User findUserById(Long id) {
-    return userRepository.findById(id)
-        .orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
+    return userRepository.findByIdAndDeletedAtIsNull(id)
+            .orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
   }
 
   @Override
@@ -59,7 +56,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   @Transactional
-  public User updateUserProfile(Long id, UserUpdateDTO updateDTO) {
+  public User updateUserProfile(Long id, UserProfileUpdateDTO updateDTO) {
     User user = userRepository.findByIdAndDeletedAtIsNull(id)
         .orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
     // Update only non-null fields
@@ -76,19 +73,13 @@ public class UserServiceImpl implements UserService {
         throw new ConflictException("Phone number already in use");
       }
       user.setPhoneNumber(updateDTO.phoneNumber());
-      ;
     }
     if (updateDTO.avatarPath() != null)
       user.setAvatarPath(updateDTO.avatarPath());
     if (updateDTO.timeZone() != null)
       user.setTimeZone(updateDTO.timeZone());
-
     return userRepository.save(user);
   }
-
-  // private boolean existsByEmailAndIdNot(String email, Long id) {
-  // return userRepository.existsByEmailAndIdNot(email, id);
-  // }
 
   @Override
   @Transactional
