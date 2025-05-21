@@ -5,6 +5,10 @@ import com.omori.chatapp.entity.User;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * RESGISTER DTO
+ *
+ */
 @Getter
 @Setter
 public class UserDTO {

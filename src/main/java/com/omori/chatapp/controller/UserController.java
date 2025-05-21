@@ -2,22 +2,27 @@ package com.omori.chatapp.controller;
 
 import com.omori.chatapp.dto.user.UserProfileResponseDTO;
 import com.omori.chatapp.dto.user.UserProfileUpdateDTO;
+import com.omori.chatapp.dto.user.UserStatusUpdateDTO;
 import com.omori.chatapp.mapper.UserMapper;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.*;
 
 import com.omori.chatapp.entity.User;
+import com.omori.chatapp.entity.enums.UserEnum.Status;
 import com.omori.chatapp.dto.user.PasswordChangeRequestDTO;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -26,7 +31,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.omori.chatapp.service.UserActivityService;
 import com.omori.chatapp.service.UserService;
+import com.omori.chatapp.service.impl.UserActivityServiceImpl;
 
 import jakarta.validation.Valid;
 
@@ -37,9 +44,14 @@ import jakarta.validation.Valid;
 public class UserController {
 
   private final UserService userService;
+  private final UserActivityServiceImpl userActivityServiceImpl;
 
-  public UserController(UserService userService) {
+  @Autowired
+  private SimpMessagingTemplate messagingTemplate;
+
+  public UserController(UserService userService, UserActivityServiceImpl userActivityServiceImpl) {
     this.userService = userService;
+    this.userActivityServiceImpl = userActivityServiceImpl;
   }
 
   @GetMapping
@@ -97,5 +109,21 @@ public class UserController {
       @Valid @RequestBody PasswordChangeRequestDTO request) {
     userService.changePassword(userId, request);
     return ResponseEntity.ok("Password updated successfully");
+  }
+
+  @PatchMapping("/{username}/status")
+  @PreAuthorize("hasAuthority('ROLE_USER') or hasAuthority('ROLE_ADMIN')")
+  @Operation(summary = "Update user status manually")
+  public ResponseEntity<?> updateUserStatus(
+      @PathVariable String username,
+      @RequestBody UserStatusUpdateDTO dto) {
+
+    Status status = dto.status();
+    userActivityServiceImpl.updateUserStatus(username, dto.status());
+    messagingTemplate.convertAndSend("/topic/status", new StatusChangedMessage(username, status));
+    return ResponseEntity.ok("Status updated successfully");
+  }
+
+  public record StatusChangedMessage(String username, Status newStatus) {
   }
 }

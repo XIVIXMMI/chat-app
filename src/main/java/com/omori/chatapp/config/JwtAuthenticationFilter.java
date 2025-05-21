@@ -10,6 +10,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.omori.chatapp.service.impl.UserActivityServiceImpl;
 import com.omori.chatapp.service.impl.UserDetailsServiceImpl;
 import com.omori.chatapp.utils.JwtUtils;
 
@@ -23,11 +24,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
   private final JwtUtils jwtUtils;
   private final UserDetailsServiceImpl userDetailsServiceImpl;
+  private final UserActivityServiceImpl userActivityServiceImpl;
 
   @Autowired
-  public JwtAuthenticationFilter(JwtUtils jwtUtils, UserDetailsServiceImpl userDetailsServiceImpl) {
+  public JwtAuthenticationFilter(JwtUtils jwtUtils, UserDetailsServiceImpl userDetailsServiceImpl,
+      UserActivityServiceImpl userActivityServiceImpl) {
     this.jwtUtils = jwtUtils;
     this.userDetailsServiceImpl = userDetailsServiceImpl;
+    this.userActivityServiceImpl = userActivityServiceImpl;
   }
 
   @Override
@@ -50,6 +54,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
           authenticationToken.setDetails(
               new WebAuthenticationDetailsSource().buildDetails(request));
           SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+
+          // set last activity for user
+          userActivityServiceImpl.markOnline(username);
         }
       }
       chain.doFilter(request, response);

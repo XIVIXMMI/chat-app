@@ -39,10 +39,12 @@ public class SecurityConfig {
             .requestMatchers(
                 "/api/auth/**",
                 "/swagger-ui/**", // pretty UI
-                "/v3/api-docs/**") // Raw JSON
+                "/v3/api-docs/**", // Raw JSON
+                "/ws/**",
+                "/api/presence/**")
             .permitAll()
-            .requestMatchers("/api/users/{userId}/profile").authenticated()
-            .requestMatchers(HttpMethod.POST, "/api/users/**/password").authenticated()
+            .requestMatchers("/api/users/*/profile").authenticated()
+            .requestMatchers(HttpMethod.POST, "/api/users/*/password").authenticated()
             .requestMatchers("/api/users/**").hasAuthority("ROLE_ADMIN")
             .anyRequest().authenticated() // other request must authenticate
         )
