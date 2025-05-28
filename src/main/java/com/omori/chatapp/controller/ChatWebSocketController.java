@@ -8,14 +8,14 @@ import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
 
 import com.omori.chatapp.dto.conversation.ChatMessageDTO;
-import com.omori.chatapp.service.ChatService;
+import com.omori.chatapp.service.impl.ChatServiceImpl;
 
 @Controller
 public class ChatWebSocketController {
 
-  private final ChatService chatService;
+  private final ChatServiceImpl chatService;
 
-  public ChatWebSocketController(ChatService chatService) {
+  public ChatWebSocketController(ChatServiceImpl chatService) {
     this.chatService = chatService;
   }
 

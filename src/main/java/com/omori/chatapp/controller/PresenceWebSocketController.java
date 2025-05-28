@@ -7,14 +7,14 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 
 import com.omori.chatapp.dto.user.UserStatusUpdateDTO;
-import com.omori.chatapp.service.impl.UserActivityServiceImpl;
+import com.omori.chatapp.service.impl.UserStatusServiceImpl;
 
 @Controller
 public class PresenceWebSocketController {
 
-  private final UserActivityServiceImpl userActivityServiceImpl;
+  private final UserStatusServiceImpl userActivityServiceImpl;
 
-  public PresenceWebSocketController(UserActivityServiceImpl userActivityServiceImpl) {
+  public PresenceWebSocketController(UserStatusServiceImpl userActivityServiceImpl) {
     this.userActivityServiceImpl = userActivityServiceImpl;
   }
 

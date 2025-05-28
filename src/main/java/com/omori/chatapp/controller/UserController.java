@@ -4,6 +4,7 @@ import com.omori.chatapp.dto.user.UserProfileResponseDTO;
 import com.omori.chatapp.dto.user.UserProfileUpdateDTO;
 import com.omori.chatapp.dto.user.UserStatusUpdateDTO;
 import com.omori.chatapp.mapper.UserMapper;
+import com.omori.chatapp.service.UserStatusService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.*;
@@ -31,9 +32,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.omori.chatapp.service.UserActivityService;
 import com.omori.chatapp.service.UserService;
-import com.omori.chatapp.service.impl.UserActivityServiceImpl;
+import com.omori.chatapp.service.impl.UserStatusServiceImpl;
 
 import jakarta.validation.Valid;
 
@@ -44,14 +44,14 @@ import jakarta.validation.Valid;
 public class UserController {
 
   private final UserService userService;
-  private final UserActivityServiceImpl userActivityServiceImpl;
+  private final UserStatusService userActivityService;
 
   @Autowired
   private SimpMessagingTemplate messagingTemplate;
 
-  public UserController(UserService userService, UserActivityServiceImpl userActivityServiceImpl) {
+  public UserController(UserService userService, UserStatusServiceImpl userActivityService) {
     this.userService = userService;
-    this.userActivityServiceImpl = userActivityServiceImpl;
+    this.userActivityService = userActivityService;
   }
 
   @GetMapping
@@ -119,7 +119,7 @@ public class UserController {
       @RequestBody UserStatusUpdateDTO dto) {
 
     Status status = dto.status();
-    userActivityServiceImpl.updateUserStatus(username, dto.status());
+    userActivityService.updateUserStatus(username, dto.status());
     messagingTemplate.convertAndSend("/topic/status", new StatusChangedMessage(username, status));
     return ResponseEntity.ok("Status updated successfully");
   }
