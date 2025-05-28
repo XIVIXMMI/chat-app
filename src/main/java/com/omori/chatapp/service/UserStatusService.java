@@ -5,7 +5,7 @@ import com.omori.chatapp.entity.enums.UserEnum.Status;
 /**
  * UserActivityService
  */
-public interface UserActivityService {
+public interface UserStatusService {
 
   void updateLastActivity(String username);
 

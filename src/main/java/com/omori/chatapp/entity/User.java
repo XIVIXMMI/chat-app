@@ -2,7 +2,6 @@ package com.omori.chatapp.entity;
 
 import com.omori.chatapp.entity.enums.UserEnum.*;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
