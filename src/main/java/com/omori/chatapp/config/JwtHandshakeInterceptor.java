@@ -5,12 +5,24 @@ import java.util.Map;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.http.server.ServletServerHttpRequest;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.server.HandshakeInterceptor;
 
+import com.omori.chatapp.service.impl.UserDetailsServiceImpl;
+import com.omori.chatapp.utils.JwtUtils;
+
 @Component
 public class JwtHandshakeInterceptor implements HandshakeInterceptor {
+
+  private final JwtUtils jwtUtils;
+  private final UserDetailsServiceImpl userDetailsService;
+
+  public JwtHandshakeInterceptor(JwtUtils jwtUtils, UserDetailsServiceImpl userDetailsService) {
+    this.jwtUtils = jwtUtils;
+    this.userDetailsService = userDetailsService;
+  }
 
   @Override
   public boolean beforeHandshake(ServerHttpRequest request,
@@ -20,10 +32,23 @@ public class JwtHandshakeInterceptor implements HandshakeInterceptor {
     if (request instanceof ServletServerHttpRequest servletRequest) {
       String token = servletRequest.getServletRequest().getHeader("Authorization");
       if (token != null && token.startsWith("Bearer ")) {
-        attributes.put("jwt", token.substring(7)); // Lưu token cho session
+        String jwt = token.substring(7);
+        try {
+          String username = jwtUtils.extractUsername(jwt);
+          UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
+          if (!jwtUtils.validateToken(jwt, userDetails)) {
+            return false; // Reject connection if token is invalid
+          }
+
+          attributes.put("jwt", jwt); // Store token for session
+          return true;
+        } catch (Exception e) {
+          return false; // Reject on any error (invalid token, user not found, etc.)
+        }
       }
     }
-    return true;
+    return false; // Reject if no valid token provided
   }
 
   @Override
