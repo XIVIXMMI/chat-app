@@ -12,6 +12,7 @@ target/
 .settings
 .springBeans
 .sts4-cache
+.env 
 
 ### IntelliJ IDEA ###
 .idea
@@ -33,6 +34,3 @@ build/
 .vscode/
 .DS_Store
 
-# Ignore application.properties ở đúng vị trí
-**/application.properties
-**/ValidationMessages.properties
