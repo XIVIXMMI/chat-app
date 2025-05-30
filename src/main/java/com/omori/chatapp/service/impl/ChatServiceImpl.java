@@ -24,16 +24,6 @@ public class ChatServiceImpl implements ChatService {
   private final RabbitTemplate rabbitTemplate;
   private final SimpMessagingTemplate messagingTemplate;
 
-  // public ChatServiceImpl(JwtUtils jwtUtils,
-  // ChatMessageRepository chatMessageRepository,
-  // RabbitTemplate rabbitTemplate,
-  // SimpMessagingTemplate messagingTemplate) {
-  // this.jwtUtils = jwtUtils;
-  // this.rabbitTemplate = rabbitTemplate;
-  // this.chatMessageRepository = chatMessageRepository;
-  // this.messagingTemplate = messagingTemplate;
-  // }
-
   @Override
   public ChatMessageDTO processAndSendMessage(ChatMessageDTO messageDTO, String jwt) {
 

@@ -19,7 +19,7 @@ public class SwaggerConfig {
         .info(new Info()
             .title("Chat Application API")
             .version("1.0.0")
-            .description("RESTful API for real-time chat Application build with Springboot.")
+            .description("RESTful API for real-timestamp chat Application build with Springboot.")
             .contact(new Contact()
                 .name("Khoi Nguyen")
                 .email("nguyen.le.programmer@gmail.com")
