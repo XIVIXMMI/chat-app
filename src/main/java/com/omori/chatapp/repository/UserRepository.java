@@ -33,8 +33,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
   @Query("SELECT u FROM User u WHERE u.deletedAt IS NOT NULL")
   Page<User> findAllDeletedUsers(Pageable pageable);
 
-  @Query("SELECT u FROM User u WHERE u.status = :status AND u.lastActivity < :time")
-  List<User> findAllByStatusAndLastActivityBefore(@Param("status") Status status, @Param("time") LocalDateTime time);
+  @Query("SELECT u FROM User u WHERE u.status = :status AND u.lastActivity < :timestamp")
+  List<User> findAllByStatusAndLastActivityBefore(@Param("status") Status status, @Param("timestamp") LocalDateTime time);
 
   // Check unique
   boolean existsByEmailAndIdNot(String email, Long id);

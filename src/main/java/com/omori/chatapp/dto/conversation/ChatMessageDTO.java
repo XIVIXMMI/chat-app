@@ -8,5 +8,5 @@ public record ChatMessageDTO(
     String content,
     String messageType,
     String conversationId,
-    LocalDateTime time) {
+    LocalDateTime timestamp) {
 }

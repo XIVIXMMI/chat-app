@@ -9,13 +9,13 @@ import org.springframework.transaction.annotation.Transactional;
 import com.omori.chatapp.entity.enums.UserEnum.Status;
 import com.omori.chatapp.exception.UserNotFoundException;
 import com.omori.chatapp.repository.UserRepository;
-import com.omori.chatapp.service.UserActivityService;
+import com.omori.chatapp.service.UserStatusService;
 
 @Service
-public class UserActivityServiceImpl implements UserActivityService {
+public class UserStatusServiceImpl implements UserStatusService {
   private final UserRepository userRepository;
 
-  public UserActivityServiceImpl(UserRepository userRepository) {
+  public UserStatusServiceImpl(UserRepository userRepository) {
     this.userRepository = userRepository;
   }
 
