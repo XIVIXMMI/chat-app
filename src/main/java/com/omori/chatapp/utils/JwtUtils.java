@@ -6,31 +6,31 @@ import javax.crypto.SecretKey;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-import org.springframework.beans.factory.annotation.Value;
+
+import com.omori.chatapp.config.EnvLoader;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 
-/**
- * JwtUtils
- */
 @Component
 public class JwtUtils {
 
-  @Value("${jwt.secret}")
+  private final EnvLoader envLoader;
+  private SecretKey secretKey;
   private String secretKeyString;
-
-  @Value("${jwt.expiration-timestamp}")
   private long expirationTime;
 
-  private SecretKey secretKey;
+  public JwtUtils(EnvLoader envLoader) {
+    this.envLoader = envLoader;
+  }
 
   @PostConstruct
   public void init() {
-    this.secretKey = Keys.hmacShaKeyFor(
-        Decoders.BASE64.decode(secretKeyString));
+    this.secretKeyString = envLoader.get("JWT_SECRET");
+    this.expirationTime = Long.parseLong(envLoader.get("JWT_EXPIRATION"));
+    this.secretKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretKeyString));
   }
 
   public String generateToken(String username) {
