@@ -22,57 +22,70 @@ import jakarta.servlet.ServletException;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-  private final JwtUtils jwtUtils;
-  private final UserDetailsServiceImpl userDetailsServiceImpl;
-  private final UserStatusServiceImpl userActivityServiceImpl;
+    private final JwtUtils jwtUtils;
+    private final UserDetailsServiceImpl userDetailsServiceImpl;
+    private final UserStatusServiceImpl userActivityServiceImpl;
 
-  @Autowired
-  public JwtAuthenticationFilter(JwtUtils jwtUtils, UserDetailsServiceImpl userDetailsServiceImpl,
-      UserStatusServiceImpl userActivityServiceImpl) {
-    this.jwtUtils = jwtUtils;
-    this.userDetailsServiceImpl = userDetailsServiceImpl;
-    this.userActivityServiceImpl = userActivityServiceImpl;
-  }
+    @Autowired
+    public JwtAuthenticationFilter(JwtUtils jwtUtils, UserDetailsServiceImpl userDetailsServiceImpl,
+                                   UserStatusServiceImpl userActivityServiceImpl) {
+        this.jwtUtils = jwtUtils;
+        this.userDetailsServiceImpl = userDetailsServiceImpl;
+        this.userActivityServiceImpl = userActivityServiceImpl;
+    }
 
-  @Override
-  protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
-      throws ServletException, IOException {
-    try {
-      String token = extractToken(request);
-      if (token != null) {
-        logger.info("Token received: " + token);
-        String username = jwtUtils.extractUsername(token);
-        logger.info("Extracted username: " + username);
-        UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(username);
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+            throws ServletException, IOException {
+        try {
+            String token = extractToken(request);
+            if (token != null) {
 
-        if (jwtUtils.validateToken(token, userDetails)) {
+                logger.info("Token received: " + token);
+                String username = jwtUtils.extractUsername(token);
+                logger.info("Extracted username: " + username);
+                UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(username);
 
-          UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-              userDetails, null, userDetails.getAuthorities());
-          // set authentication details
-          logger.info("User authorities: " + userDetails.getAuthorities());
-          authenticationToken.setDetails(
-              new WebAuthenticationDetailsSource().buildDetails(request));
-          SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                if (jwtUtils.validateToken(token, userDetails)) {
 
-          // set last activity for user
-          userActivityServiceImpl.markOnline(username);
+                    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                            userDetails, null, userDetails.getAuthorities());
+                    // set authentication details
+                    logger.info("User authorities: " + userDetails.getAuthorities());
+                    authenticationToken.setDetails(
+                            new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+
+                    // set last activity for user
+                    userActivityServiceImpl.markOnline(username);
+                }
+            }
+            chain.doFilter(request, response);
+        } catch (Exception e) {
+            // log error , handle token validation exception
+            logger.error("JWT Authentication Error: ", e);
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("Authentication failed: " + e.getMessage());
         }
-      }
-      chain.doFilter(request, response);
-    } catch (Exception e) {
-      // log error , handle token validation exception
-      logger.error("JWT Authentication Error: ", e);
-      response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-      response.getWriter().write("Authentication failed: " + e.getMessage());
     }
-  }
 
-  private String extractToken(HttpServletRequest request) {
-    String authHeader = request.getHeader("Authorization");
-    if (authHeader != null && authHeader.startsWith("Bearer ")) {
-      return authHeader.substring(7);
-    }
-    return null;
-  }
+    private String extractToken(HttpServletRequest request) {
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            String token = authHeader.substring(7).trim();
+            if (token.isEmpty()) {
+                logger.warn("Token String is empty after Bearer prefix");
+                return null;
+            }
+            // Add validation for token structure
+            if (token.chars().filter(ch -> ch == '.').count() != 2) {
+                logger.warn("Invalid JWT structure - expected 2 period separators");
+                return null;
+            }
+                return token;
+            }
+            logger.warn("Authorization header missing or invalid");
+            return null;
+        }
+
 }

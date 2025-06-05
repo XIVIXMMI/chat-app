@@ -15,39 +15,39 @@ import com.omori.chatapp.entity.enums.UserEnum.Status;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-  Optional<User> findByEmail(String email);
+    Optional<User> findByEmail(String email);
 
-  Optional<User> findByUsername(String username);
+    Optional<User> findByUsername(String username);
 
-  Optional<User> findByIdAndDeletedAtIsNull(Long id);
+    Optional<User> findByIdAndDeletedAtIsNull(Long id);
 
-  Optional<User> findByEmailAndDeletedAtIsNull(String email);
+    Optional<User> findByEmailAndDeletedAtIsNull(String email);
 
-  Optional<User> findByUsernameAndDeletedAtIsNull(String username);
+    Optional<User> findByUsernameAndDeletedAtIsNull(String username);
 
-  // Find all user still active (use in findAll)
-  @Query("SELECT u FROM User u WHERE u.deletedAt IS NULL")
-  Page<User> findAllActiveUsers(Pageable pageable);
+    // Find all user still active (use in findAll)
+    @Query("SELECT u FROM User u WHERE u.deletedAt IS NULL")
+    Page<User> findAllActiveUsers(Pageable pageable);
 
-  // Find all user have been soft deleted
-  @Query("SELECT u FROM User u WHERE u.deletedAt IS NOT NULL")
-  Page<User> findAllDeletedUsers(Pageable pageable);
+    // Find all user have been soft deleted
+    @Query("SELECT u FROM User u WHERE u.deletedAt IS NOT NULL")
+    Page<User> findAllDeletedUsers(Pageable pageable);
 
-  @Query("SELECT u FROM User u WHERE u.status = :status AND u.lastActivity < :timestamp")
-  List<User> findAllByStatusAndLastActivityBefore(@Param("status") Status status, @Param("timestamp") LocalDateTime time);
+    @Query("SELECT u FROM User u WHERE u.status = :status AND u.lastActivity < :timestamp")
+    List<User> findAllByStatusAndLastActivityBefore(@Param("status") Status status, @Param("timestamp") LocalDateTime time);
 
-  // Check unique
-  boolean existsByEmailAndIdNot(String email, Long id);
+    // Check unique
+    boolean existsByEmailAndIdNot(String email, Long id);
 
-  boolean existsByPhoneNumberAndIdNot(String phoneNumber, Long id);
+    boolean existsByPhoneNumberAndIdNot(String phoneNumber, Long id);
 
-  // Check existed
-  boolean existsByEmail(String email);
+    // Check existed
+    boolean existsByEmail(String email);
 
-  boolean existsByUsername(String username);
+    boolean existsByUsername(String username);
 
-  // Optional: check by active
-  boolean existsByEmailAndDeletedAtIsNull(String email);
+    // Optional: check by active
+    boolean existsByEmailAndDeletedAtIsNull(String email);
 
-  boolean existsByUsernameAndDeletedAtIsNull(String username);
+    boolean existsByUsernameAndDeletedAtIsNull(String username);
 }

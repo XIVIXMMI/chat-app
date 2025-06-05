@@ -2,6 +2,9 @@ package com.omori.chatapp.entity;
 
 import java.time.LocalDateTime;
 
+import com.omori.chatapp.entity.enums.MessageEnum.ContentType;
+import com.omori.chatapp.entity.enums.MessageEnum.MessageStatus;
+import com.omori.chatapp.entity.enums.MessageEnum.MessageType;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import jakarta.persistence.Id;
@@ -25,5 +28,8 @@ public class ChatMessage {
   private String receiver;
   private String content;
   private LocalDateTime timestamp;
-  private String type;
+
+  private MessageStatus messageStatus;
+  private MessageType messageType;
+  private ContentType contentType;
 }

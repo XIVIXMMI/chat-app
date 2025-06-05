@@ -38,6 +38,6 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(IllegalArgumentException.class)
   public ResponseEntity<ErrorResponseDTO> handleIllegalArgument(IllegalArgumentException ex) {
     return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-        .body(new ErrorResponseDTO("INVALID_REQUEST", "invalid parameters provided."));
+        .body(new ErrorResponseDTO("INVALID_REQUEST", ex.getMessage()));
   }
 }

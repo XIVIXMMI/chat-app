@@ -57,7 +57,7 @@ public class User {
   @Column(name = "last_login")
   private LocalDateTime lastLogin;
 
-  @Column(name = "last_activitiy")
+  @Column(name = "last_activity")
   private LocalDateTime lastActivity;
 
   @Column(name = "is_verified")
@@ -120,83 +120,4 @@ public class User {
     this.deletedAt = null;
   }
 
-  /*
-   * Getter &Setter
-   */
-
-  public Long getId() {
-    return this.id;
-  }
-
-  public String getUsername() {
-    return this.username;
-  }
-
-  public void setUsername(String username) {
-    this.username = username;
-  }
-
-  public String getPasswordHash() {
-    return this.passwordHash;
-  }
-
-  public void setPasswordHash(String passwordHash) {
-    this.passwordHash = passwordHash;
-  }
-
-  public String getEmail() {
-    return this.email;
-  }
-
-  public void setEmail(String email) {
-    this.email = email;
-  }
-
-  public String getFullName() {
-    return this.fullName;
-  }
-
-  public void setFullName(String fullName) {
-    this.fullName = fullName;
-  }
-
-  public String getPhoneNumber() {
-    return this.phoneNumber;
-  }
-
-  public void setPhoneNumber(String phoneNumber) {
-    this.phoneNumber = phoneNumber;
-  }
-
-  public String getAvatarPath() {
-    return this.avatarPath;
-  }
-
-  public void setAvatarPath(String avatarPath) {
-    this.avatarPath = avatarPath;
-  }
-
-  public Role getRole() {
-    return this.role;
-  }
-
-  public void setRole(Role role) {
-    this.role = role;
-  }
-
-  public void setAuthProvider(AuthProvider authProvider) {
-    this.authProvider = authProvider;
-  }
-
-  public void setDeletedAt(LocalDateTime deletedAt) {
-    this.deletedAt = deletedAt;
-  }
-
-  public String getTimeZone() {
-    return this.timeZone;
-  }
-
-  public void setTimeZone(String timeZone) {
-    this.timeZone = timeZone;
-  }
 }

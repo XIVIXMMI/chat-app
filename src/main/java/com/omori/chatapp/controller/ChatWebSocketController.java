@@ -1,7 +1,9 @@
 package com.omori.chatapp.controller;
 
+import java.security.Principal;
 import java.util.Map;
 
+import com.omori.chatapp.entity.enums.MessageEnum.MessageStatus;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.annotation.SendToUser;
@@ -19,17 +21,40 @@ public class ChatWebSocketController {
     this.chatService = chatService;
   }
 
+  /**
+   * Handles private messages between users
+   *
+   * @param messageDTO The message data transfer object
+   * @param principal The authenticated user (auto-injected by Spring Security)
+   * @return The processed message (sent back to the sender)
+   */
   @MessageMapping("/chat.send")
   @SendToUser("/queue/messages")
-  public ChatMessageDTO sendPrivateMessage(
-      ChatMessageDTO messageDTO,
-      @Header("simpSessionAttributes") Map<String, Object> sessionAttributes) {
-    String jwt = (String) sessionAttributes.get("jwt");
-    return chatService.processAndSendMessage(messageDTO, jwt);
+  public ChatMessageDTO handlePrivateMessage(
+          ChatMessageDTO messageDTO,
+          Principal principal) {
+
+    messageDTO.setSenderUsername(principal.getName());
+    ChatMessageDTO processed = chatService.processAndSendMessage(messageDTO);
+    processed.setMessageStatus(MessageStatus.SENT);
+    return processed;
   }
 
+  /**
+   * Handles group messages broadcast to multiple users
+   *
+   * @param messageDTO The message data transfer object
+   * @param principal The authenticated user (auto-injected by Spring Security)
+   */
   @MessageMapping("/chat.group")
-  public void sendGroupMessage(ChatMessageDTO messageDTO) {
+  public void handleGroupMessage(
+          ChatMessageDTO messageDTO,
+          Principal principal) {
+
+    // Set sender from authenticated user
+    messageDTO.setSenderUsername(principal.getName());
+
+    // Broadcast to group
     chatService.broadcastMessage(messageDTO);
   }
 }
