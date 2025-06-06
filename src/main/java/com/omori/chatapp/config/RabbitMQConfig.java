@@ -1,5 +1,6 @@
 package com.omori.chatapp.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Queue;
@@ -27,4 +28,9 @@ public class RabbitMQConfig {
   public Binding binding(Queue queue, TopicExchange exchange) {
     return BindingBuilder.bind(queue).to(exchange).with(CHAT_ROUTING_KEY);
   }
+
+//  @Bean
+//  public ObjectMapper objectMapper() {
+//    return new ObjectMapper();
+//  }
 }

@@ -20,10 +20,8 @@ public class ConversationController {
     @PostMapping
     @Operation(summary = "Send messages to another user")
     public ResponseEntity<ChatMessageDTO> sendMessage(
-            @Valid @RequestBody ChatMessageDTO messageDTO,
-            @RequestHeader("Authorization") String authorizationHeader){
-        String token = authorizationHeader.replace("Bearer ","").trim();
-        ChatMessageDTO message =  chatService.processAndSendMessage(messageDTO,token);
+            @Valid @RequestBody ChatMessageDTO messageDTO){
+        ChatMessageDTO message =  chatService.processAndSendMessage(messageDTO);
 
         return ResponseEntity.ok(message);
     }
