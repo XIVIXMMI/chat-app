@@ -25,7 +25,7 @@ public class ChatWebSocketController {
       ChatMessageDTO messageDTO,
       @Header("simpSessionAttributes") Map<String, Object> sessionAttributes) {
     String jwt = (String) sessionAttributes.get("jwt");
-    return chatService.processAndSendMessage(messageDTO, jwt);
+    return chatService.processAndSendMessage(messageDTO);
   }
 
   @MessageMapping("/chat.group")
