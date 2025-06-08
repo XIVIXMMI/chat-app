@@ -57,7 +57,7 @@ public class User {
   @Column(name = "last_login")
   private LocalDateTime lastLogin;
 
-  @Column(name = "last_activitiy")
+  @Column(name = "last_activity")
   private LocalDateTime lastActivity;
 
   @Column(name = "is_verified")
