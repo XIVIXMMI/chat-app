@@ -28,7 +28,8 @@ public class ChatServiceImpl implements ChatService {
     private final ObjectMapper mapper;
 
     @Override
-    public ChatMessageDTO processAndSendMessage(ChatMessageDTO messageDTO) {
+    public ChatMessageDTO processAndSendMessage(ChatMessageDTO messageDTO, String senderUsername) {
+        messageDTO.setSenderUsername(senderUsername);
         saveToMongoDB(messageDTO);
         pushToRabbitMQ(messageDTO);
         return messageDTO;
